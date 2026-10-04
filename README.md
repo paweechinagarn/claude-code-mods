@@ -49,20 +49,32 @@ conversation into the cache again. On a long session that is the most expensive 
 
 ### What it shows
 
-A line above the prompt:
+One row above the prompt, readable at a glance:
 
 ```text
-Cache 1h · 42m left · hit 97% last, 91% session
+● Cache ━━━━━━━━━━━━───── 42m left of 1h · hits ▅▇██▇█ 97% more
+▲ Cache ━━─────────────── expires in 4m of 1h · hits ▅▇██▇█ 97% more
+✕ Cache ──────────────── expired 12m ago of 1h · hits ▅▇██▇█ 97% · next message re-caches 186k tokens more
 ```
 
-- **1h or 5m** is how long the cache lives. A trailing `?` means it is still assumed. The mod confirms it
-  from the first request that follows more than six idle minutes: a cache hit means one hour, a miss means
-  five minutes. A model switch reports it directly.
-- **Time left** counts from the last request that read or wrote the cache. The line turns yellow in the
-  last five minutes and red once the cache has expired, and then it says how many tokens the next message
-  will re-cache.
-- **Hit rate** is cached tokens over all input tokens, for the last request and for the whole session.
+- **The bar and the time** count down from the last request that read or wrote the cache. The bar is shaded
+  red to amber to green from left to right, so its shrinking end drifts into red. The time is green while fresh, amber in the last five minutes, red once expired. A symbol and words carry the state too, so it
+  never rests on color alone.
+- **Hits** is a sparkline of the last 12 requests and the share of the last request served from the cache.
+  Each bar is shaded by its own hit rate on the same red, amber and green scale, so a miss shows red.
+  Slots not yet filled show an empty track.
   Only the main conversation counts; subagents keep caches of their own.
+- **more** (hotkey `d`) opens the details: the cache lifetime and how the mod knows it, the last
+  request's and the session's token counts, and what an expiry would cost.
+
+Claude Code does not report the cache lifetime on each request, so the mod assumes one hour until it sees
+proof: a request after a pause of six or more minutes that still hits the cache (one hour), or misses it
+(five minutes). A model switch reports the lifetime directly. The details panel says which of these it is.
+On narrow windows the row drops the sparkline and the lifetime.
+
+The desktop app, the editor extension and the phone draw both bars as vector graphics: a rounded
+gradient pill and a row of rounded columns. The terminal draws them with line and block characters, the
+examples above.
 
 ### Advice before the cache expires
 
@@ -104,7 +116,7 @@ The constants at the top of [cache-watch/hooks/register.tsx](cache-watch/hooks/r
 
 ### Status
 
-Version 0.1.0. Checked with `claude plugin validate` and a strict TypeScript build, and the line above
+Version 0.2.0. Checked with `claude plugin validate` and a strict TypeScript build, and the line above
 the prompt is confirmed drawing in the desktop app. The advice flow, the copy button on the desktop
 surface and **Compact now** have not yet run in a real session.
 

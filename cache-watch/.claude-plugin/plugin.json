@@ -1,6 +1,6 @@
 {
   "name": "cache-watch",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Shows prompt-cache hit rate and time to expiry, and offers the cheapest way to carry on before the cache lapses.",
   "author": { "name": "Pawee Chinagarn" },
   "repository": "https://github.com/paweechinagarn/claude-code-mods",

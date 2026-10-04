@@ -9,6 +9,8 @@ export type CacheTtl = {
    * reported: the engine said so on a model switch.
    */
   how: 'assumed' | 'observed' | 'reported'
+  /** The idle gap, in minutes, of the request that showed it. */
+  gapMin?: number
 }
 
 export type CachePick = 'continue' | 'compact' | 'handoff'
@@ -34,12 +36,16 @@ declare module 'claude-code' {
       activeAt: number | null
       last: CacheCounts | null
       total: CacheCounts
+      /** Hit percentages of the recent main-thread requests, oldest first. */
+      history: number[]
       ttl: CacheTtl
       /** The clock, ticked so the countdown redraws. */
       now: number
       advice: CacheAdvice | null
       /** The activeAt the advice was prepared for, so it runs once per idle stretch. */
       advisedFor: number | null
+      isExpanded: boolean
+      isCompacting: boolean
     }
   }
 }
