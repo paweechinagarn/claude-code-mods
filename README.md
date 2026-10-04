@@ -7,6 +7,7 @@ self-contained mod that works in any repository.
 | Mod | What it does |
 | --- | --- |
 | [cache-watch](#cache-watch) | Shows the prompt cache's hit rate and time left, and suggests the cheapest way to carry on before the cache expires. |
+| [sticky-todos](#sticky-todos) | Keeps Claude's todo list in a pane beside the transcript, open only while the list has items. |
 
 > [!note]
 > The function-hooks API is in early access and changes between Claude Code releases. These mods were
@@ -33,7 +34,7 @@ claude --plugin-dir <clone>/cache-watch
 ```json
 {
   "env": {
-    "CLAUDE_CODE_PLUGIN_DIRS": "<clone>/cache-watch"
+    "CLAUDE_CODE_PLUGIN_DIRS": "<clone>/cache-watch;<clone>/sticky-todos"
   }
 }
 ```
@@ -126,6 +127,60 @@ The constants at the top of [cache-watch/hooks/register.tsx](cache-watch/hooks/r
 Version 0.2.0. Checked with `claude plugin validate` and a strict TypeScript build, and the line above
 the prompt is confirmed drawing in the desktop app. The advice flow, the copy button on the desktop
 surface and **Compact now** have not yet run in a real session.
+
+## sticky-todos
+
+When Claude works through a multi-step task it keeps a checklist, but the checklist sits in the
+transcript and scrolls away. This mod keeps it in a pane of its own, beside the transcript and clear of
+the messages and the prompt.
+
+### What it shows
+
+A pane beside the transcript, clear of the messages and the prompt. These images are mockups styled like
+the desktop app. The ring and the step icons come from the mod's own drawing code, but spacing in the app
+differs slightly. [docs/sticky-todos/mockup.html](docs/sticky-todos/mockup.html) is their source.
+
+![A transcript on the left and the Todos pane docked on the right, showing 2 of 4 tasks done](docs/sticky-todos/layout.png)
+
+The pane up close:
+
+![The Todos pane: a progress ring reading 2 of 4, two finished tasks with green checks, one task in progress in orange, one pending task and a Clear done button](docs/sticky-todos/pane.png)
+
+- **The ring** fills as tasks finish, with the count inside. The line beside it says how many are done
+  and how many are in progress.
+- **The steps** are joined by a thin line that turns green between finished tasks. A finished task has
+  a green check and is dimmed and struck through. The task in progress has a spinning orange ring and
+  shows its "doing" wording in bold. A task still to do has an empty circle. The spin stops when the
+  system asks for reduced motion. **Clear done** removes the finished tasks.
+- The terminal cannot draw these images, so it shows colored symbols instead: ✔ done, ◐ in progress
+  and ○ to do.
+- The pane opens by itself when the list gets its first item and closes when the list empties. If you
+  close it while tasks remain, it stays closed until the list starts again. `/todos` opens it at any time.
+- The list survives a reload or a resume, and the pane comes back with it.
+- In the desktop app the pane docks beside the transcript. In the terminal it docks in fullscreen mode
+  and otherwise sits above the prompt. A pane that opens by itself needs a terminal at least 144 columns
+  wide; `/todos` opens it at any width.
+
+### Where the list comes from
+
+The mod reads whichever todo tool the session gives the model:
+
+| Tool | How the mod reads it |
+| --- | --- |
+| `TodoWrite` | Each call carries the whole list, which replaces the pane's. |
+| `TaskCreate` and `TaskUpdate` | Each call adds one task or changes one task's status or wording. |
+| `mcp__sticky-todos__set_todos` | The mod's own tool, in `TodoWrite`'s shape. |
+
+Some sessions, such as the desktop app's Code tab, give the model neither built-in tool. For those the
+mod registers its own `set_todos` tool, so the model can keep a list anyway. The tool's description
+tells the model to prefer a built-in todo tool when it has one.
+
+### Status
+
+Version 0.2.0. Checked with `claude plugin validate` and a strict TypeScript build, and the mod's own
+`set_todos` tool has run in a real desktop-app session. The redesigned pane has not yet been seen in the
+app, so the spinning icon is untested. Reading `TodoWrite`, `TaskCreate` and `TaskUpdate` has not yet run
+in a real session.
 
 ## Writing your own
 

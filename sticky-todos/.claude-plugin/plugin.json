@@ -1,0 +1,9 @@
+{
+  "name": "sticky-todos",
+  "version": "0.2.0",
+  "description": "Keeps Claude's todo list in a side pane beside the transcript, open only while the list has items.",
+  "author": { "name": "Pawee Chinagarn" },
+  "repository": "https://github.com/paweechinagarn/claude-code-mods",
+  "license": "MIT",
+  "types": "./types/index.d.ts"
+}
