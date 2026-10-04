@@ -49,13 +49,20 @@ conversation into the cache again. On a long session that is the most expensive 
 
 ### What it shows
 
-One row above the prompt, readable at a glance:
+One row above the prompt, readable at a glance. These images are mockups drawn with the mod's own bar
+code and styled like the desktop app, so spacing in the app differs slightly.
 
-```text
-● Cache ━━━━━━━━━━━━───── 42m left of 1h · hits ▅▇██▇█ 97% more
-▲ Cache ━━─────────────── expires in 4m of 1h · hits ▅▇██▇█ 97% more
-✕ Cache ──────────────── expired 12m ago of 1h · hits ▅▇██▇█ 97% · next message re-caches 186k tokens more
-```
+**Fresh**, with the details panel open (**more**, or the `d` key):
+
+![The cache row with 58 minutes left and a 99% hit rate, with the details panel open](docs/cache-watch/details.png)
+
+**About to expire**, with the advice card:
+
+![The cache row in amber with 3 minutes left, above the advice card suggesting a new session](docs/cache-watch/advice.png)
+
+**Expired**:
+
+![The cache row in red, 12 minutes after expiry, warning that the next message re-caches 185k tokens](docs/cache-watch/expired.png)
 
 - **The bar and the time** count down from the last request that read or wrote the cache. The bar is shaded
   red to amber to green from left to right, so its shrinking end drifts into red. The time is green while fresh, amber in the last five minutes, red once expired. A symbol and words carry the state too, so it
@@ -73,8 +80,8 @@ proof: a request after a pause of six or more minutes that still hits the cache 
 On narrow windows the row drops the sparkline and the lifetime.
 
 The desktop app, the editor extension and the phone draw both bars as vector graphics: a rounded
-gradient pill and a row of rounded columns. The terminal draws them with line and block characters, the
-examples above.
+gradient pill and a row of rounded columns. The terminal draws them with line and block characters
+instead.
 
 ### Advice before the cache expires
 
