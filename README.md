@@ -177,10 +177,9 @@ tells the model to prefer a built-in todo tool when it has one.
 
 ### Status
 
-Version 0.2.0. Checked with `claude plugin validate` and a strict TypeScript build, and the mod's own
-`set_todos` tool has run in a real desktop-app session. The redesigned pane has not yet been seen in the
-app, so the spinning icon is untested. Reading `TodoWrite`, `TaskCreate` and `TaskUpdate` has not yet run
-in a real session.
+Version 0.2.0. Checked with `claude plugin validate` and a strict TypeScript build. In a real desktop-app
+session, the mod's own `set_todos` tool filled the pane, and the ring, the stepper and the spinning icon
+drew as designed. Reading `TodoWrite`, `TaskCreate` and `TaskUpdate` has not yet run in a real session.
 
 ## Writing your own
 
