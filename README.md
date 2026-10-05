@@ -16,7 +16,26 @@ self-contained mod that works in any repository.
 
 ## Install
 
-Clone the repository anywhere:
+This repository is a plugin marketplace. Add it once, then install the mods you want. Inside Claude Code:
+
+```
+/plugin marketplace add paweechinagarn/claude-code-mods
+/plugin install cache-watch@claude-code-mods
+/plugin install sticky-todos@claude-code-mods
+/reload-plugins
+```
+
+The same commands work from a shell as `claude plugin marketplace add ...` and `claude plugin install ...`.
+If a mod does not appear after `/reload-plugins`, restart Claude Code.
+
+To pick up new versions, refresh the marketplace with `/plugin marketplace update claude-code-mods`.
+
+A mod is code that runs inside Claude Code with the same access Claude Code has. Read it before you
+install it.
+
+### Run from a clone (for development)
+
+An installed mod is a cached copy. To edit a mod and see changes live, load it from a clone instead:
 
 ```bash
 git clone https://github.com/paweechinagarn/claude-code-mods.git
@@ -39,7 +58,8 @@ claude --plugin-dir <clone>/cache-watch
 }
 ```
 
-Interactive sessions watch these folders, so a `git pull` reloads the mod without a restart.
+Interactive sessions watch these folders, so an edit or a `git pull` reloads the mod without a restart.
+Do not load the same mod both ways at once.
 
 ## cache-watch
 
@@ -185,6 +205,8 @@ drew as designed. Reading `TodoWrite`, `TaskCreate` and `TaskUpdate` has not yet
 
 A mod is a folder with three files: `.claude-plugin/plugin.json`, `hooks/hooks.json` naming the module,
 and the hooks module exporting `register(on)`. A mod that keeps state adds a `types/index.d.ts` contract.
+To ship a new mod from this repository, add its folder and list it in
+[.claude-plugin/marketplace.json](.claude-plugin/marketplace.json) with its `name` and `source`.
 Inside Claude Code, the bundled `plugin-authoring` skill holds the full API for the version you run.
 `cache-watch` is a working example of a line above the prompt, a pane, a slash command, a timer and a
 model fork.

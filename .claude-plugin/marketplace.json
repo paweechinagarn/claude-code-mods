@@ -1,0 +1,19 @@
+{
+  "name": "claude-code-mods",
+  "owner": {
+    "name": "Pawee Chinagarn"
+  },
+  "metadata": {
+    "description": "Mods for Claude Code: small plugins of function hooks that draw inside the terminal or the desktop app's Code tab."
+  },
+  "plugins": [
+    {
+      "name": "cache-watch",
+      "source": "./cache-watch"
+    },
+    {
+      "name": "sticky-todos",
+      "source": "./sticky-todos"
+    }
+  ]
+}
