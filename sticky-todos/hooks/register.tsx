@@ -59,7 +59,8 @@ const stepSvg = (status: Todo['status'], isFirst: boolean, isLast: boolean, isPr
         : `<circle cx="${x}" cy="${mid}" r="6.5" fill="none" stroke-width="2" ${TRACK}/>`
   const motion =
     status === 'in_progress'
-      ? `<style>.spin{transform-origin:${x}px ${mid}px;animation:s 1.1s linear infinite}` +
+      ? // The interactive frame paints an opaque white backdrop when its color scheme differs from the page's.
+        `<style>:root{color-scheme:light dark;background:transparent}.spin{transform-origin:${x}px ${mid}px;animation:s 1.1s linear infinite}` +
         `@keyframes s{to{transform:rotate(360deg)}}@media (prefers-reduced-motion:reduce){.spin{animation:none}}</style>`
       : ''
   return (
